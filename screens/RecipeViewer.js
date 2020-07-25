@@ -42,24 +42,24 @@ const RecipeViewer = (props) => {
                     <Text style={styles.bullet}>•</Text><Text style={styles.regularFont}>1 tsp of Garlic Salt</Text>
                 </View>
             </View>
-            <View>
-                <Text>Instructions</Text>
+            <View style={styles.headingContainer}>
+                <Text style={styles.headingText}>Instructions</Text>
             </View>
-            <View>
-                <View>
-                    <Text>1. </Text><Text>Put a pot in medium/low heat. </Text>
+            <View style={styles.dataContainer}>
+                <View style={styles.row}>
+                    <Text style={styles.bullet}>1. </Text><Text style={styles.regularFont}>Put a pot in medium/low heat. </Text>
                 </View>
-                <View>
-                    <Text>2. </Text><Text>Put rice when the water begins to Evaporate.</Text>
+                <View style={styles.row}>
+                    <Text style={styles.bullet}>2. </Text><Text style={styles.regularFont}>Put rice when the water begins to Evaporate.</Text>
                 </View>
-                <View>
-                    <Text>3. </Text><Text>Simmer for 15 Minutes. </Text>
+                <View style={styles.row}>
+                    <Text style={styles.bullet}>3. </Text><Text style={styles.regularFont}>Simmer for 15 Minutes. </Text>
                 </View>
-                <View>
-                    <Text>4. </Text><Text>Add the rest of ingredients and simmer for another 15 Minutes.</Text>
+                <View style={styles.row}>
+                    <Text style={styles.bullet}>4. </Text><Text style={styles.regularFont}>Add the rest of ingredients and simmer for another 15 Minutes.</Text>
                 </View>
-                <View>
-                    <Text>5. </Text><Text> Taste if good then it's done.</Text>
+                <View style={styles.row}>
+                    <Text style={styles.bullet}>5. </Text><Text style={styles.regularFont}>Taste if good then it's done.</Text>
                 </View>
             </View>
         </ScrollView>
