@@ -45,7 +45,7 @@ const RecipeViewer = (props) => {
             <View style={styles.headingContainer}>
                 <Text style={styles.headingText}>Instructions</Text>
             </View>
-            <View style={styles.dataContainer}>
+            <View style={styles.recipeDataContainer}>
                 <View style={styles.row}>
                     <Text style={styles.bullet}>1. </Text><Text style={styles.regularFont}>Put a pot in medium/low heat. </Text>
                 </View>
@@ -82,6 +82,10 @@ const styles = StyleSheet.create({
     },
     metaDataContainer: {
         alignItems: 'center'
+    },
+    recipeDataContainer: {
+        marginHorizontal: 20,
+        marginBottom: 30
     },
     metaDataItem: {
         flexDirection: 'row'

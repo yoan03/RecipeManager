@@ -2,7 +2,8 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
 // Screens
 import RecipesScreen from './screens/Recipes';
@@ -29,10 +30,16 @@ const Navigator = (props) => {
             tabBarOptions={{
                 inactiveBackgroundColor: '#624cab',
                 activeBackgroundColor: '#624cab',
-                activeTintColor: '#aaa',
-                inactiveTintColor: '#fff',
+                activeTintColor: '#fff',
+                inactiveTintColor: '#aaa',
                 labelStyle: {
                     fontSize: 14
+                },
+                style: {
+                    height: 60
+                },
+                tabStyle: {
+                    paddingVertical: 5
                 }
             }}
             >
@@ -41,7 +48,7 @@ const Navigator = (props) => {
                 component={RecipeViewerScreen}
                 options={{
                     title: 'Recipe',
-                    tabBarIcon: ({color}) => <MaterialCommunityIcons name="book-open" size={24} color={color} />,
+                    tabBarIcon: ({color, size}) => <FontAwesome5 name='list-alt' color={color} size={size} />,
                     ...defaultScreenOptions
                 }}
                 
@@ -51,7 +58,7 @@ const Navigator = (props) => {
                 component={RecipeGalleryScreen}
                 options={{
                     title: 'Gallery',
-                    tabBarIcon: ({color}) => <MaterialCommunityIcons name="camera" size={24} color={color} />,
+                    tabBarIcon: ({color, size}) => <FontAwesome5 name="camera" size={size} color={color} />,
                     ...defaultScreenOptions
                 }}
                 />
@@ -60,7 +67,7 @@ const Navigator = (props) => {
                 component={RecipeNotesScreen}
                 options={{
                     title: 'Notes',
-                    tabBarIcon: ({color}) => <MaterialCommunityIcons name="note-text" size={24} color={color} />,
+                    tabBarIcon: ({color}) => <FontAwesome5 name="sticky-note" size={24} color={color} />,
                     ...defaultScreenOptions
                 }}
                 />
