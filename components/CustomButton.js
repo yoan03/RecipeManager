@@ -20,9 +20,8 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         textAlign: 'center',
-        paddingVertical: 8,
-        fontSize: 16,
-        fontWeight: 'bold'
+        paddingVertical: 12,
+        fontSize: 18
     }
 });
 
