@@ -1,102 +1,84 @@
-import React, {Fragment} from 'react';
-import {ScrollView, View, Text, StyleSheet} from 'react-native';
+import React, { Fragment, useState } from 'react';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 
 // Component
 import FloatingButton from '../components/FloatingButton';
+import { FlatList } from 'react-native-gesture-handler';
 
-const RecipeGallery = (props) => {
+// RecipeItem
+const NoteItem = (props) => (
+    <View style={styles.noteBox}>
+        <View style={styles.noteContentBox}>
+            <Text style={styles.noteContent}>{props.note}</Text>
+        </View>
+        <View style={styles.noteDateBox}>
+            <Text style={styles.noteDate}>{props.date}</Text>
+        </View>
+    </View>
+);
+
+const RecipeNotes = (props) => {
+    const [initialDragY, setInitialDragY] = useState(0);
+    const [currentDragY, setCurrentDragY] = useState(0);
+
+    const data = [
+        {
+            note: 'When I add it 1 tsp extra of salt it taste better.',
+            date: '10/11/20 12:00pm'
+        },
+        {
+            note: 'Today I add one mushroom chopped to the mix it came out great!!',
+            date: '10/11/20 12:00pm'
+        },
+        {
+            note: 'Today was a raining day and it didn\'t stop rainy the whole day somehow the recipe came out soggy due to high hydration level in the atmosphere.',
+            date: '10/11/20 12:00pm'
+        },
+        {
+            note: 'When I add it 1 tsp extra of salt it taste better.',
+            date: '10/11/20 12:00pm'
+        },
+        {
+            note: 'Today I add one mushroom chopped to the mix it came out great!!',
+            date: '10/11/20 12:00pm'
+        },
+        {
+            note: 'Today was a raining day and it didn\'t stop rainy the whole day somehow the recipe came out soggy due to high hydration level in the atmosphere.',
+            date: '10/11/20 12:00pm'
+        },
+        {
+            note: 'When I add it 1 tsp extra of salt it taste better.',
+            date: '10/11/20 12:00pm'
+        },
+        {
+            note: 'Today I add one mushroom chopped to the mix it came out great!!',
+            date: '10/11/20 12:00pm'
+        },
+        {
+            note: 'Today was a raining day and it didn\'t stop rainy the whole day somehow the recipe came out soggy due to high hydration level in the atmosphere.',
+            date: '10/11/20 12:00pm'
+        }
+    ];
+
+    const renderNotes = ({item}) => {
+        return <NoteItem note={item.note} date={item.date} />
+    }
+
     return (
         <View style={styles.RecipeNotes}>
-            <ScrollView style={styles.RecipeNoteScrollView}>
-                {/* Note Item */}
-                <View style={styles.noteBox}>
-                    <View style={styles.noteContentBox}>
-                        <Text style={styles.noteContent}>When I add it 1 tsp extra of salt it taste better.</Text>
-                    </View>
-                    <View style={styles.noteDateBox}>
-                        <Text style={styles.noteDate}>10/11/20 12:00pm</Text>
-                    </View>
-                </View>
-                {/* Note Item */}
-                <View style={styles.noteBox}>
-                    <View style={styles.noteContentBox}>
-                        <Text style={styles.noteContent}>Today I add one mushroom chopped to the mix it came out great!!</Text>
-                    </View>
-                    <View style={styles.noteDateBox}>
-                        <Text style={styles.noteDate}>10/11/20 12:00pm</Text>
-                    </View>
-                </View>
-                {/* Note Item */}
-                <View style={styles.noteBox}>
-                    <View style={styles.noteContentBox}>
-                        <Text style={styles.noteContent}>Today was a raining day and it didn't stop rainy the whole day somehow the recipe came out soggy due to high hydration level in the atmosphere.</Text>
-                    </View>
-                    <View style={styles.noteDateBox}>
-                        <Text style={styles.noteDate}>10/11/20 12:00pm</Text>
-                    </View>
-                </View>
-                {/* Note Item */}
-                <View style={styles.noteBox}>
-                    <View style={styles.noteContentBox}>
-                        <Text style={styles.noteContent}>When I add it 1 tsp extra of salt it taste better.</Text>
-                    </View>
-                    <View style={styles.noteDateBox}>
-                        <Text style={styles.noteDate}>10/11/20 12:00pm</Text>
-                    </View>
-                </View>
-                {/* Note Item */}
-                <View style={styles.noteBox}>
-                    <View style={styles.noteContentBox}>
-                        <Text style={styles.noteContent}>Today I add one mushroom chopped to the mix it came out great!!</Text>
-                    </View>
-                    <View style={styles.noteDateBox}>
-                        <Text style={styles.noteDate}>10/11/20 12:00pm</Text>
-                    </View>
-                </View>
-                {/* Note Item */}
-                <View style={styles.noteBox}>
-                    <View style={styles.noteContentBox}>
-                        <Text style={styles.noteContent}>Today was a raining day and it didn't stop rainy the whole day somehow the recipe came out soggy due to high hydration level in the atmosphere.</Text>
-                    </View>
-                    <View style={styles.noteDateBox}>
-                        <Text style={styles.noteDate}>10/11/20 12:00pm</Text>
-                    </View>
-                </View>
-                {/* Note Item */}
-                <View style={styles.noteBox}>
-                    <View style={styles.noteContentBox}>
-                        <Text style={styles.noteContent}>When I add it 1 tsp extra of salt it taste better.</Text>
-                    </View>
-                    <View style={styles.noteDateBox}>
-                        <Text style={styles.noteDate}>10/11/20 12:00pm</Text>
-                    </View>
-                </View>
-                {/* Note Item */}
-                <View style={styles.noteBox}>
-                    <View style={styles.noteContentBox}>
-                        <Text style={styles.noteContent}>Today I add one mushroom chopped to the mix it came out great!!</Text>
-                    </View>
-                    <View style={styles.noteDateBox}>
-                        <Text style={styles.noteDate}>10/11/20 12:00pm</Text>
-                    </View>
-                </View>
-                {/* Note Item */}
-                <View style={styles.noteBox}>
-                    <View style={styles.noteContentBox}>
-                        <Text style={styles.noteContent}>Today was a raining day and it didn't stop rainy the whole day somehow the recipe came out soggy due to high hydration level in the atmosphere.</Text>
-                    </View>
-                    <View style={styles.noteDateBox}>
-                        <Text style={styles.noteDate}>10/11/20 12:00pm</Text>
-                    </View>
-                </View>
-                <View style={{marginBottom: 100}}>
+            <FlatList 
+                style={styles.RecipeNoteScrollView} 
+                data={data} 
+                renderItem={renderNotes}
+                keyExtractor={(item, index) => index + "nt"}
+                onScrollBeginDrag={(e) => setInitialDragY(e.nativeEvent.contentOffset.y)}
+                onScroll={(e) => setCurrentDragY(e.nativeEvent.contentOffset.y)} />
 
-                </View>
-            </ScrollView>
-            <FloatingButton 
+            <FloatingButton
                 containerStyle={styles.floatingButtonContainer}
                 color="#7189ff"
-                onPress={() => props.navigation.navigate('AddRecipe')} />
+                onPress={() => props.navigation.navigate('AddRecipe')}
+                hide={currentDragY > (initialDragY + 20)} />
         </View>
     );
 };
@@ -131,10 +113,10 @@ const styles = StyleSheet.create({
         textAlign: 'right'
     },
     floatingButtonContainer: {
-        position: 'absolute', 
-        bottom: 20, 
+        position: 'absolute',
+        bottom: 20,
         right: 20
     }
 });
 
-export default RecipeGallery;
+export default RecipeNotes;

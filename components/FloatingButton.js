@@ -1,11 +1,21 @@
-import React from 'react';
-import {View, Text, TouchableNativeFeedback, StyleSheet} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {Easing, View, Text, TouchableNativeFeedback, StyleSheet, Animated} from 'react-native';
 import PropTypes from 'prop-types';
 
 
 const FloatingButton = (props) => {
+    const moveDownY = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        const animationTime = 250;
+        if(props.hide)
+            Animated.timing(moveDownY, { toValue: 100, duration: animationTime, useNativeDriver: true, easing: Easing.ease }).start();
+        else
+            Animated.timing(moveDownY, { toValue: 0, duration: animationTime, useNativeDriver: true, easing: Easing.ease }).start();
+    }, [props.hide, moveDownY]);
+
     return (
-        <View style={{...styles.container, ...props.containerStyle}}>
+        <Animated.View style={{...styles.container, ...props.containerStyle, transform: [{translateY: moveDownY}]}}>
             <TouchableNativeFeedback
                 background={TouchableNativeFeedback.Ripple(props.rippleColor)}
                 onPress={props.onPress}>
@@ -13,7 +23,7 @@ const FloatingButton = (props) => {
                         <Text style={{...styles.text, ...props.textStyle}}>{props.title}</Text>
                     </View>
             </TouchableNativeFeedback>
-        </View>
+        </Animated.View>
     )
 };
 
