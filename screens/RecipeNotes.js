@@ -82,7 +82,7 @@ const RecipeNotes = (props) => {
                 color="#7189ff"
                 onPress={() => setShowAddNoteModal(true)}
                 viewPos={{ current: currentDragY, initial: initialDragY }} />
-            <Modal transparent={true} visible={showAddNoteModal} onRequestClose={() => setShowAddNoteModal(false)}>
+            <Modal transparent={true} visible={showAddNoteModal} onRequestClose={() => setShowAddNoteModal(false)} animationType="fade">
                 <TouchableWithoutFeedback onPressOut={() => setShowAddNoteModal(false)}>
                     <View style={styles.modalContainer}>
                         <TouchableWithoutFeedback>
