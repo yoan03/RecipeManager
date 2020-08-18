@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { View, Text, Modal, TextInput, Button, TouchableWithoutFeedback, StyleSheet } from 'react-native';
 
 // Component
 import FloatingButton from '../components/FloatingButton';
@@ -18,6 +18,10 @@ const NoteItem = (props) => (
 );
 
 const RecipeNotes = (props) => {
+    // Modal State
+    const [showAddNoteModal, setShowAddNoteModal] = useState(false);
+
+    // Floating Button Managing state
     const [initialDragY, setInitialDragY] = useState(0);
     const [currentDragY, setCurrentDragY] = useState(0);
 
@@ -60,15 +64,15 @@ const RecipeNotes = (props) => {
         }
     ];
 
-    const renderNotes = ({item}) => {
+    const renderNotes = ({ item }) => {
         return <NoteItem note={item.note} date={item.date} />
     }
 
     return (
         <View style={styles.RecipeNotes}>
-            <FlatList 
-                style={styles.RecipeNoteScrollView} 
-                data={data} 
+            <FlatList
+                style={styles.RecipeNoteScrollView}
+                data={data}
                 renderItem={renderNotes}
                 keyExtractor={(item, index) => index + "nt"}
                 onScrollBeginDrag={(e) => setInitialDragY(e.nativeEvent.contentOffset.y)}
@@ -76,8 +80,27 @@ const RecipeNotes = (props) => {
             <FloatingButton
                 containerStyle={styles.floatingButtonContainer}
                 color="#7189ff"
-                onPress={() => props.navigation.navigate('AddRecipe')}
-                viewPos={{current: currentDragY, initial: initialDragY}} />
+                onPress={() => setShowAddNoteModal(true)}
+                viewPos={{ current: currentDragY, initial: initialDragY }} />
+            <Modal transparent={true} visible={showAddNoteModal} onRequestClose={() => setShowAddNoteModal(false)}>
+                <TouchableWithoutFeedback onPressOut={() => setShowAddNoteModal(false)}>
+                    <View style={styles.modalContainer}>
+                        <TouchableWithoutFeedback>
+                            <View style={styles.modalView}>
+                                <View>
+                                    <TextInput
+                                        style={styles.textInputStyle}
+                                        placeholder="Input Text"
+                                        multiline={true} />
+                                </View>
+                                <View style={styles.modalButton}>
+                                    <Button title="Add Note" color="#624cab" />
+                                </View>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
         </View>
     );
 };
@@ -115,6 +138,27 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 20,
         right: 20
+    },
+    textInputStyle: {
+        backgroundColor: '#ededed',
+        paddingVertical: 10,
+        fontSize: 18,
+        borderRadius: 4,
+        paddingLeft: 10,
+        marginBottom: 10
+    },
+    modalContainer: {
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        flex: 1,
+        justifyContent: 'center'
+    },
+    modalView: {
+        backgroundColor: '#fff',
+        margin: 20,
+        padding: 10
+    },
+    modalButton: {
+        width: "50%"
     }
 });
 
