@@ -73,12 +73,11 @@ const RecipeNotes = (props) => {
                 keyExtractor={(item, index) => index + "nt"}
                 onScrollBeginDrag={(e) => setInitialDragY(e.nativeEvent.contentOffset.y)}
                 onScroll={(e) => setCurrentDragY(e.nativeEvent.contentOffset.y)} />
-
             <FloatingButton
                 containerStyle={styles.floatingButtonContainer}
                 color="#7189ff"
                 onPress={() => props.navigation.navigate('AddRecipe')}
-                hide={currentDragY > (initialDragY + 20)} />
+                viewPos={{current: currentDragY, initial: initialDragY}} />
         </View>
     );
 };
