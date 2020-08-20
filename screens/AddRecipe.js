@@ -12,20 +12,25 @@ const AddRecipe = (props) => {
                 <TextInput 
                     style={styles.textInputStyle}
                     placeholder="Recipe Name"
-                    placeholderTextColor="#999" />
-                    <TextInput 
-                        style={styles.textInputStyle}
-                        placeholder="Recipe Description"
-                        placeholderTextColor="#999" />
+                    placeholderTextColor="#999"
+                    maxLength={60} />
+                <TextInput 
+                    style={styles.textInputStyle}
+                    placeholder="Recipe Description"
+                    placeholderTextColor="#999"
+                    maxLength={160}
+                    multiline={true} />
                 <View style={styles.rowContainer}>
                     <TextInput 
                         style={styles.rowTextInputStyle}
                         placeholder="Recipe Duration"
-                        placeholderTextColor="#999" />
+                        placeholderTextColor="#999"
+                        maxLength={20} />
                     <TextInput 
                         style={styles.rowTextInputStyle}
                         placeholder="Recipe Difficulty"
-                        placeholderTextColor="#999" />
+                        placeholderTextColor="#999"
+                        maxLength={20} />
                 </View>
                 {/* Put a divider here */}
                 <View style={styles.horizontalDivider} />
@@ -33,11 +38,13 @@ const AddRecipe = (props) => {
                     <TextInput 
                         style={styles.ingredientTextInputStyle}
                         placeholder="Ingredients to add"
-                        placeholderTextColor="#999" />
+                        placeholderTextColor="#999"
+                        maxLength={30} />
                     <TextInput 
                         style={styles.rowTextInputStyle}
                         placeholder="Qty"
-                        placeholderTextColor="#999" />
+                        placeholderTextColor="#999"
+                        maxLength={20} />
                 </View>
                 <View style={styles.addIngredientButtonContainer}>
                     <CustomButton 
@@ -89,7 +96,9 @@ const AddRecipe = (props) => {
                 <TextInput 
                         style={styles.textInputStyle}
                         placeholder="Step To Add"
-                        placeholderTextColor="#999" />
+                        placeholderTextColor="#999"
+                        maxLength={255}
+                        multiline={true} />
                 <View style={styles.addIngredientButtonContainer}>
                     <CustomButton 
                         title="Add Step"
