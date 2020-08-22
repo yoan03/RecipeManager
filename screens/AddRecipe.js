@@ -39,10 +39,30 @@ const reducer = (state, action) => {
                 ...state,
                 ingredients: filteredIngredients
             };
+        case 'ADD_INSTRUCTION':
+            const instruction = {
+                id: uuidv4(),
+                instruction: action.instruction,
+            };
+            return {
+                ...state,
+                instructions: [
+                    ...state.instructions,
+                    instruction
+                ]
+            };
+        case 'REMOVE_INSTRUCTION':
+            const instructions = [...state.instructions];
+            const filteredInstructions = instructions.filter((instruction => instruction.id !== action.id));
+
+            return {
+                ...state,
+                instructions: filteredInstructions
+            };
     }
 };
 
-// Ingredient Item Components
+// Ingredient Item Component
 const IngredientItem = (props) => (
     <View style={styles.ingredientListItem}>
         <View>
@@ -57,10 +77,25 @@ const IngredientItem = (props) => (
     </View>
 );
 
+// Instruction Item Component
+const InstructionItem = (props) => (
+    <View style={styles.ingredientListItem}>
+        <View>
+            <Text style={styles.ingredientListItemTitle}>{props.index + 1}. {props.instruction}</Text>
+        </View>
+        {props.last ? <TouchableOpacity style={styles.ingredientListItemRemove} onPress={props.onRemove}>
+            <FontAwesome5
+                name="trash-alt"
+                size={16}
+                color="red" />
+        </TouchableOpacity> : null}
+    </View>
+);
 
 const AddRecipe = (props) => {
     const [ingredientName, setIngredientName] = useState('');
     const [ingredientQty, setIngredientQty] = useState('');
+    const [instructionText, setInstructionText] = useState('');
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const onAddIngredientHandler = () => {
@@ -69,9 +104,21 @@ const AddRecipe = (props) => {
             name: ingredientName,
             qty: ingredientQty
         });
+
+        // Clear the inputs
         setIngredientName('');
         setIngredientQty('');
     }
+
+    const onAddInstructionHandler = () => {
+        dispatch({
+            type: 'ADD_INSTRUCTION',
+            instruction: instructionText
+        });
+
+        // Clear the input
+        setInstructionText('');
+    };
 
     return (
         <ScrollView style={styles.addRecipeScreen}>
@@ -129,13 +176,13 @@ const AddRecipe = (props) => {
                         <Text style={styles.ingredientsContainerHeading}>Ingredients</Text>
                     </View>
                     <View style={styles.ingredientsListContainer}>
-                       {state.ingredients.length === 0 ? <Text>Please add ingredients</Text> :
-                       state.ingredients.map((ingredient) => 
-                       <IngredientItem 
-                            key={ingredient.id} 
-                            name={ingredient.name} 
-                            qty={ingredient.qty}
-                            onRemoveIngredient={() => dispatch({type: 'REMOVE_INGREDIENT', id: ingredient.id})} />)} 
+                        {state.ingredients.length === 0 ? <Text>Please add ingredients</Text> :
+                            state.ingredients.map((ingredient) =>
+                                <IngredientItem
+                                    key={ingredient.id}
+                                    name={ingredient.name}
+                                    qty={ingredient.qty}
+                                    onRemoveIngredient={() => dispatch({ type: 'REMOVE_INGREDIENT', id: ingredient.id })} />)}
                     </View>
                 </View>
                 {/* Put a divider here */}
@@ -145,11 +192,14 @@ const AddRecipe = (props) => {
                     placeholder="Step To Add"
                     placeholderTextColor="#999"
                     maxLength={255}
-                    multiline={true} />
+                    multiline={true}
+                    onChangeText={(text) => setInstructionText(text)}
+                    value={instructionText} />
                 <View style={styles.addIngredientButtonContainer}>
                     <CustomButton
                         title="Add Step"
-                        color="#624cab" />
+                        color="#624cab"
+                        onPress={onAddInstructionHandler} />
                 </View>
 
                 <View style={styles.ingredientsContainer}>
@@ -157,27 +207,16 @@ const AddRecipe = (props) => {
                         <Text style={styles.ingredientsContainerHeading}>Steps</Text>
                     </View>
                     <View style={styles.ingredientsListContainer}>
-                        <View style={styles.ingredientListItem}>
-                            <View>
-                                <Text style={styles.ingredientListItemTitle}>1. Put a pot in medium/low heat.</Text>
-                            </View>
-                        </View>
-                        <View style={styles.ingredientListItem}>
-                            <View>
-                                <Text style={styles.ingredientListItemTitle}>2. Put rice when the water begins to Evaporate.</Text>
-                            </View>
-                        </View>
-                        <View style={styles.ingredientListItem}>
-                            <View>
-                                <Text style={styles.ingredientListItemTitle}>3. Simmer for 15 Minutes.</Text>
-                            </View>
-                            <TouchableOpacity style={styles.ingredientListItemRemove}>
-                                <FontAwesome5
-                                    name="trash-alt"
-                                    size={16}
-                                    color="red" />
-                            </TouchableOpacity>
-                        </View>
+                        {state.instructions.length === 0 ? 
+                            <Text>Please add at least an instruction</Text> :
+                            state.instructions.map(({id, instruction}, index) => 
+                                <InstructionItem 
+                                    key={id} 
+                                    id={id} 
+                                    index={index} 
+                                    instruction={instruction} 
+                                    last={state.instructions.length === (++index)}
+                                    onRemove={() => dispatch({type: 'REMOVE_INSTRUCTION', id: id})}  />)}
                     </View>
                 </View>
                 {/* Put a divider here */}
