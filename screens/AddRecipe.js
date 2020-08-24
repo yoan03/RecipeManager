@@ -2,6 +2,8 @@ import React, { useState, useReducer } from 'react';
 import { ScrollView, View, Text, TextInput, TouchableOpacity, Image, ImageBackground, StyleSheet } from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
+import db from '../data/db_controller';
 
 // components
 import CustomButton from '../components/CustomButton';
@@ -17,6 +19,22 @@ const initialState = {
 
 const reducer = (state, action) => {
     switch (action.type) {
+        // on recipe name change
+        case 'ON_RECIPE_NAME_CHANGE':
+            return { ...state, recipeName: action.recipeName };
+
+        // on recipe name change
+        case 'ON_RECIPE_DESC_CHANGE':
+            return { ...state, recipeDesc: action.recipeDesc };
+
+        // on recipe duration change
+        case 'ON_RECIPE_DURATION_CHANGE':
+            return { ...state, recipeDuration: action.recipeDuration };
+
+        // on recipe difficulty change
+        case 'ON_RECIPE_DIFFICULTY_CHANGE':
+            return { ...state, recipeDifficulty: action.recipeDifficulty };
+
         // Add ingredient
         case 'ADD_INGREDIENT':
             const ingredient = {
@@ -96,6 +114,7 @@ const AddRecipe = (props) => {
     const [ingredientName, setIngredientName] = useState('');
     const [ingredientQty, setIngredientQty] = useState('');
     const [instructionText, setInstructionText] = useState('');
+    const [previewImage, setPreviewImage] = useState('');
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const onAddIngredientHandler = () => {
@@ -120,6 +139,40 @@ const AddRecipe = (props) => {
         setInstructionText('');
     };
 
+    const onLoadingPreviewImage = async () => {
+        try {
+            let result = await launchImageLibraryAsync({
+                mediaTypes: MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+            });
+
+            // Save the image uri in the state
+            if (!result.cancelled) {
+                setPreviewImage(result.uri);
+            }
+
+            console.log(result);
+        } catch (E) {
+            console.log(E);
+        }
+    };
+
+    const onSubmitRecipe = () => {
+        // Save the recipe as a record
+        db.transaction(tx => {
+            tx.executeSql(`
+                INSERT INTO Recipe (name, desc, duration, difficulty, ingredients, steps, image_uri) VALUES ( ?, ?, ?, ?, ?, ?, ?);
+            `, [state.recipeName, state.recipeDesc, state.recipeDuration, state.recipeDifficulty, JSON.stringify(state.ingredients), JSON.stringify(state.instructions), previewImage],
+                (_, { insertId }) => {
+                    // If the recipe is added successfully go back
+                    if (insertId)
+                        props.navigation.navigate('Recipes');
+                })
+        });
+    };
+
     return (
         <ScrollView style={styles.addRecipeScreen}>
             <View style={styles.addRecipeContainer}>
@@ -127,24 +180,32 @@ const AddRecipe = (props) => {
                     style={styles.textInputStyle}
                     placeholder="Recipe Name"
                     placeholderTextColor="#999"
-                    maxLength={60} />
+                    maxLength={60}
+                    value={state.recipeName}
+                    onChangeText={(text) => dispatch({ type: 'ON_RECIPE_NAME_CHANGE', recipeName: text })} />
                 <TextInput
                     style={styles.textInputStyle}
                     placeholder="Recipe Description"
                     placeholderTextColor="#999"
                     maxLength={160}
-                    multiline={true} />
+                    multiline={true}
+                    value={state.recipeDesc}
+                    onChangeText={(text) => dispatch({ type: 'ON_RECIPE_DESC_CHANGE', recipeDesc: text })} />
                 <View style={styles.rowContainer}>
                     <TextInput
                         style={styles.rowTextInputStyle}
                         placeholder="Recipe Duration"
                         placeholderTextColor="#999"
-                        maxLength={20} />
+                        maxLength={20}
+                        value={state.recipeDuration}
+                        onChangeText={(text) => dispatch({ type: 'ON_RECIPE_DURATION_CHANGE', recipeDuration: text })} />
                     <TextInput
                         style={styles.rowTextInputStyle}
                         placeholder="Recipe Difficulty"
                         placeholderTextColor="#999"
-                        maxLength={20} />
+                        maxLength={20}
+                        value={state.recipeDifficulty}
+                        onChangeText={(text) => dispatch({ type: 'ON_RECIPE_DIFFICULTY_CHANGE', recipeDifficulty: text })} />
                 </View>
                 {/* Put a divider here */}
                 <View style={styles.horizontalDivider} />
@@ -207,16 +268,16 @@ const AddRecipe = (props) => {
                         <Text style={styles.ingredientsContainerHeading}>Steps</Text>
                     </View>
                     <View style={styles.ingredientsListContainer}>
-                        {state.instructions.length === 0 ? 
+                        {state.instructions.length === 0 ?
                             <Text>Please add at least an instruction</Text> :
-                            state.instructions.map(({id, instruction}, index) => 
-                                <InstructionItem 
-                                    key={id} 
-                                    id={id} 
-                                    index={index} 
-                                    instruction={instruction} 
+                            state.instructions.map(({ id, instruction }, index) =>
+                                <InstructionItem
+                                    key={id}
+                                    id={id}
+                                    index={index}
+                                    instruction={instruction}
                                     last={state.instructions.length === (++index)}
-                                    onRemove={() => dispatch({type: 'REMOVE_INSTRUCTION', id: id})}  />)}
+                                    onRemove={() => dispatch({ type: 'REMOVE_INSTRUCTION', id: id })} />)}
                     </View>
                 </View>
                 {/* Put a divider here */}
@@ -227,14 +288,16 @@ const AddRecipe = (props) => {
                         <View style={styles.addIngredientButtonContainer}>
                             <CustomButton
                                 title="Load Image"
-                                color="#624cab" />
+                                color="#624cab"
+                                onPress={onLoadingPreviewImage} />
                         </View>
                     </ImageBackground>
                 </View>
                 <View style={styles.addIngredientButtonContainer}>
                     <CustomButton
                         title="Add Recipe"
-                        color="#624cab" />
+                        color="#624cab"
+                        onPress={onSubmitRecipe} />
                 </View>
             </View>
         </ScrollView>

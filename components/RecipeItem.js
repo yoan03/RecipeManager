@@ -3,6 +3,7 @@ import {TouchableNativeFeedback} from 'react-native-gesture-handler';
 import {View, Image, Text, StyleSheet} from 'react-native';
 
 const RecipeItem = (props) => {
+    console.log(props);
     return (
         <View style={styles.recipeItem}>
             <TouchableNativeFeedback
