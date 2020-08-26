@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {ScrollView,TouchableNativeFeedback, View, Image, Text, Button, TextInput, StyleSheet, FlatList} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import {View, StyleSheet, FlatList} from 'react-native';
 
 // Components
 import SearchInput from '../components/SearchInput';
@@ -19,10 +18,11 @@ const Recipe = (props) => {
         // Check the recipes store in the database!
         db.transaction(tx => {
             tx.executeSql(`
-                SELECT name, desc, duration, difficulty FROM Recipe
+                SELECT id, name, desc, duration, difficulty, image_uri FROM Recipe
             `, [], (_, {rows}) => {
                 console.log("Uhm")
                 const recipesFormatted = rows._array.map(obj => ({
+                    id: obj.id,
                     title: obj.name,
                     description: obj.desc,
                     metas: [
@@ -33,12 +33,11 @@ const Recipe = (props) => {
                         {
                             name: 'Level',
                             value: obj.difficulty
-                        }]
+                        }],
+                        imageUri: obj.image_uri
                     }
+                    
                 ));
-
-
-                console.log("Recipes: ", recipesFormatted);
 
                 setRecipes(recipesFormatted);
             }, (error) => {
@@ -52,8 +51,8 @@ const Recipe = (props) => {
             <SearchInput />
             <FlatList style={styles.screen} 
                 data={recipes}
-                renderItem={({item}) => <RecipeItem title={item.title} description={item.description} metas={item.metas} onPress={() => props.navigation.navigate('RecipeViewer')} />} 
-                keyExtractor={(item, index) => (index + "RecipeItem")}
+                renderItem={({item}) => <RecipeItem title={item.title} description={item.description} metas={item.metas} onPress={() => props.navigation.navigate('Recipe',{recipeId: item.id})} imageUri={item.imageUri} />} 
+                keyExtractor={(item) => ("RecipeItem"+item.id)}
                 onScrollBeginDrag={(e) => setInitialDragY(e.nativeEvent.contentOffset.y)}
                 onScroll={(e) => setCurrentDragY(e.nativeEvent.contentOffset.y)} />
             <FloatingButton 

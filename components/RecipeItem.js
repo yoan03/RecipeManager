@@ -1,38 +1,35 @@
 import React from 'react';
-import {TouchableNativeFeedback} from 'react-native-gesture-handler';
-import {View, Image, Text, StyleSheet} from 'react-native';
+import { TouchableNativeFeedback } from 'react-native-gesture-handler';
+import { View, Image, Text, StyleSheet } from 'react-native';
 
-const RecipeItem = (props) => {
-    console.log(props);
-    return (
-        <View style={styles.recipeItem}>
-            <TouchableNativeFeedback
-                background={TouchableNativeFeedback.Ripple('#ccc')}
-                onPress={props.onPress}>
-                <View style={styles.recipeContainer}>
-                    <View style={styles.imageContainer}>
-                        <Image 
-                            style={styles.image} 
-                            source={require('../assets/recipe_demo1.jpg')}
-                            resizeMode='cover' />
-                    </View>
-                    <View style={styles.infoContainer}> 
-                        <Text style={styles.title}>{props.title}</Text>
-                        <Text style={styles.description}>{props.description}</Text>
-                        
-                        <View style={styles.infoMetaContainer}>
-                            {props.metas.map(meta => (
-                                <View style={styles.infoMeta} key={meta.name}>
-                                    <Text style={styles.infoMetaLabel}>{meta.name}: </Text><Text>{meta.value}</Text>
-                                </View>
-                            ))}
-                        </View>
+const RecipeItem = (props) => (
+    <View style={styles.recipeItem}>
+        <TouchableNativeFeedback
+            background={TouchableNativeFeedback.Ripple('#ccc')}
+            onPress={props.onPress}>
+            <View style={styles.recipeContainer}>
+                <View style={styles.imageContainer}>
+                    <Image
+                        style={styles.image}
+                        source={props.imageUri ? { uri: props.imageUri } : require('../assets/no_image_available.png')}
+                        resizeMode='cover' />
+                </View>
+                <View style={styles.infoContainer}>
+                    <Text style={styles.title}>{props.title}</Text>
+                    <Text style={styles.description}>{props.description}</Text>
+
+                    <View style={styles.infoMetaContainer}>
+                        {props.metas.map(meta => (
+                            <View style={styles.infoMeta} key={meta.name}>
+                                <Text style={styles.infoMetaLabel}>{meta.name}: </Text><Text>{meta.value}</Text>
+                            </View>
+                        ))}
                     </View>
                 </View>
-            </TouchableNativeFeedback>
-        </View>
-    )
-}
+            </View>
+        </TouchableNativeFeedback>
+    </View>
+);
 
 const styles = StyleSheet.create({
     recipeItem: {
@@ -42,12 +39,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 4,
         elevation: 4
-    },  
+    },
     recipeContainer: {
-        
+
         flexDirection: 'row',
         alignItems: 'center',
-        
+
     },
     imageContainer: {
         flexDirection: 'row',
@@ -59,7 +56,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 15
     },
     image: {
-        flex: 1
+        flex: 1,
+        width: 100,
+        height: 100
     },
     title: {
         fontWeight: 'bold',
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginVertical: 10
     },
-    infoMetaContainer:{
+    infoMetaContainer: {
         marginTop: 10,
         marginRight: 10,
         flexDirection: 'row',

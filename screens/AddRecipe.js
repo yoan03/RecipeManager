@@ -1,9 +1,11 @@
 import React, { useState, useReducer } from 'react';
-import { ScrollView, View, Text, TextInput, TouchableOpacity, Image, ImageBackground, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, TextInput, TouchableOpacity, ImageBackground, StyleSheet} from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
 import db from '../data/db_controller';
+import * as FileSystem from 'expo-file-system';
+import Path from 'path';
 
 // components
 import CustomButton from '../components/CustomButton';
@@ -159,12 +161,21 @@ const AddRecipe = (props) => {
         }
     };
 
-    const onSubmitRecipe = () => {
-        // Save the recipe as a record
+    const onSubmitRecipe = async () => {
+        const newPath = `${FileSystem.documentDirectory}${Math.floor(Math.random() * 1000000)}${Path.extname(previewImage)}`;
+        const result = await FileSystem.copyAsync({ from: previewImage, to: newPath});
+        const info = await FileSystem.getInfoAsync(newPath);
+        if(info.exists){
+            recordRecipe(newPath);
+        }
+    };
+
+    // Save the recipe as a record
+    const recordRecipe = (previewUri) => {
         db.transaction(tx => {
             tx.executeSql(`
                 INSERT INTO Recipe (name, desc, duration, difficulty, ingredients, steps, image_uri) VALUES ( ?, ?, ?, ?, ?, ?, ?);
-            `, [state.recipeName, state.recipeDesc, state.recipeDuration, state.recipeDifficulty, JSON.stringify(state.ingredients), JSON.stringify(state.instructions), previewImage],
+            `, [state.recipeName, state.recipeDesc, state.recipeDuration, state.recipeDifficulty, JSON.stringify(state.ingredients), JSON.stringify(state.instructions), previewUri],
                 (_, { insertId }) => {
                     // If the recipe is added successfully go back
                     if (insertId)
@@ -284,12 +295,18 @@ const AddRecipe = (props) => {
                 <View style={styles.horizontalDivider} />
                 <Text style={styles.textHeading}>Recipe Image</Text>
                 <View>
-                    <ImageBackground resizeMode="contain" style={{ flex: 1, height: 250, justifyContent: 'center' }} source={require('../assets/no_image_available.png')}>
+                    <ImageBackground resizeMode="contain" style={{ flex: 1, height: 250, justifyContent: 'center' }} source={previewImage ? { uri: previewImage} : require('../assets/no_image_available.png')}>
                         <View style={styles.addIngredientButtonContainer}>
-                            <CustomButton
-                                title="Load Image"
-                                color="#624cab"
-                                onPress={onLoadingPreviewImage} />
+                            {previewImage ?
+                                <CustomButton 
+                                    title="Remove Image"
+                                    color="#dc143c"
+                                    onPress={() => setPreviewImage(null)}
+                                />
+                                : <CustomButton
+                                    title="Load Image"
+                                    color="#624cab"
+                                    onPress={onLoadingPreviewImage} />}
                         </View>
                     </ImageBackground>
                 </View>
@@ -350,7 +367,8 @@ const styles = StyleSheet.create({
     addIngredientButtonContainer: {
         width: '50%',
         height: 50,
-        alignSelf: 'center'
+        alignSelf: 'center',
+        marginTop: 20
     },
     ingredientsContainer: {
         margin: 10

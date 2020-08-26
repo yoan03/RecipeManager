@@ -13,7 +13,8 @@ It is an app to save home made receipt and change it, and store the changes in y
 - [x] Create a SQLite database in the phone
 - [x] Save the data of the new recipe
 - [x] Show the save recipe in the front page.
-- [ ] Make the data also store the image and show
+- [x] Make the data also store the image and show
+- [ ] Show the recipe info in the viewer (Only preview image for the moment)
+- [ ] Delete Recipes and a modal to confirm deletion
 - [ ] Also show when there is no recipe
-- [ ] Show the recipe info in the viewer
-- [ ] Delete recipe in the viewer and show a modal to confirm deletion
+- [ ] Clean up code!

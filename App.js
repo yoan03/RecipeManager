@@ -36,6 +36,7 @@ db.transaction((tx) => {
   `);
 });
 
+
 export default function App() {
   return (
     <Navigator />
