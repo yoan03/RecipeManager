@@ -85,7 +85,7 @@ const reducer = (state, action) => {
 // Ingredient Item Component
 const IngredientItem = (props) => (
     <View style={styles.ingredientListItem}>
-        <View>
+        <View style={styles.ingredientListValue}>
             <Text style={styles.ingredientListItemTitle}> • {props.name} - {props.qty}</Text>
         </View>
         <TouchableOpacity style={styles.ingredientListItemRemove} onPress={props.onRemoveIngredient}>
@@ -100,7 +100,7 @@ const IngredientItem = (props) => (
 // Instruction Item Component
 const InstructionItem = (props) => (
     <View style={styles.ingredientListItem}>
-        <View>
+        <View style={styles.ingredientListValue}>
             <Text style={styles.ingredientListItemTitle}>{props.index + 1}. {props.instruction}</Text>
         </View>
         {props.last ? <TouchableOpacity style={styles.ingredientListItemRemove} onPress={props.onRemove}>
@@ -381,20 +381,23 @@ const styles = StyleSheet.create({
     ingredientsListContainer: {
         backgroundColor: '#ededed',
         borderRadius: 4,
-        padding: 10
+        padding: 10,
     },
     ingredientListItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginVertical: 3
+        marginVertical: 3,
     },
     ingredientListItemTitle: {
         fontSize: 16,
         fontWeight: 'bold'
     },
+    ingredientListValue: {
+        width: '95%'
+    },
     ingredientListItemRemove: {
-        marginRight: 10
+        width: '5%'
     },
     textHeading: {
         textAlign: 'center',

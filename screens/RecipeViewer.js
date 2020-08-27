@@ -39,21 +39,15 @@ const RecipeViewer = (props) => {
                     <View style={styles.imageContainer}>
                         <Image
                             resizeMode='contain'
-                            source={recipeInfo.imagePreview ? { uri: recipeInfo.imagePreview} : require('../assets/no_image_available.png')}
+                            source={recipeInfo.imagePreview ? { uri: recipeInfo.imagePreview } : require('../assets/no_image_available.png')}
                             style={styles.image} />
                     </View>
                     <View style={styles.metaDataContainer}>
                         <View style={styles.metaDataItem}>
-                            <Text style={styles.metaDataLabel}>Ready In:</Text><Text style={styles.metaDataValue}>30 Minutes</Text>
+                            <Text style={styles.metaDataLabel}>Ready In:</Text><Text style={styles.metaDataValue}>{recipeInfo.duration}</Text>
                         </View>
                         <View style={styles.metaDataItem}>
-                            <Text style={styles.metaDataLabel}>Level:</Text><Text style={styles.metaDataValue}>Beginner</Text>
-                        </View>
-                        <View style={styles.metaDataItem}>
-                            <Text style={styles.metaDataLabel}>Done:</Text><Text style={styles.metaDataValue}>2 Times</Text>
-                        </View>
-                        <View style={styles.metaDataItem}>
-                            <Text style={styles.metaDataLabel}>Next Level:</Text><Text style={styles.metaDataValue}>10</Text>
+                            <Text style={styles.metaDataLabel}>Level:</Text><Text style={styles.metaDataValue}>{recipeInfo.difficulty}</Text>
                         </View>
                     </View>
 
@@ -61,38 +55,21 @@ const RecipeViewer = (props) => {
                         <Text style={styles.headingText}>Ingredients</Text>
                     </View>
                     <View style={styles.dataContainer}>
-                        <View style={styles.row}>
-                            <Text style={styles.bullet}>•</Text><Text style={styles.regularFont}>2 Cups of Rice</Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.bullet}>•</Text><Text style={styles.regularFont}>1 Bag of Mixed Vegetable</Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.bullet}>•</Text><Text style={styles.regularFont}>1 tsp of Salt</Text>
-                        </View >
-                        <View style={styles.row}>
-                            <Text style={styles.bullet}>•</Text><Text style={styles.regularFont}>1 tsp of Garlic Salt</Text>
-                        </View>
+                        {recipeInfo.ingredients.map(ingredient => (
+                            <View style={styles.row}>
+                                <Text style={styles.bullet}>• </Text><Text style={styles.regularFont}>{ingredient.name} • {ingredient.qty}</Text>
+                            </View>
+                        ))}
                     </View>
                     <View style={styles.headingContainer}>
                         <Text style={styles.headingText}>Instructions</Text>
                     </View>
                     <View style={styles.recipeDataContainer}>
-                        <View style={styles.row}>
-                            <Text style={styles.bullet}>1. </Text><Text style={styles.regularFont}>Put a pot in medium/low heat. </Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.bullet}>2. </Text><Text style={styles.regularFont}>Put rice when the water begins to Evaporate.</Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.bullet}>3. </Text><Text style={styles.regularFont}>Simmer for 15 Minutes. </Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.bullet}>4. </Text><Text style={styles.regularFont}>Add the rest of ingredients and simmer for another 15 Minutes.</Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.bullet}>5. </Text><Text style={styles.regularFont}>Taste if good then it's done.</Text>
-                        </View>
+                        {recipeInfo.instructions.map((instruction, index) => (
+                            <View style={styles.row}>
+                                <Text style={styles.bullet}>{index+1}. </Text><Text style={styles.regularFont}>{instruction.instruction}</Text>
+                            </View>
+                        ))}
                     </View>
                 </>
             }

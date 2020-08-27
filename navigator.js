@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, TouchableOpacity, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -95,6 +96,11 @@ const Navigator = (props) => {
                     component={TabRecipeViewerNavigator}
                     options={{
                         title: "Recipe Viewer",
+                        headerRight: () => (
+                            <TouchableOpacity style={{marginRight: 24, marginTop: 5}}>
+                                <FontAwesome5 name='ellipsis-v' color="#fff" size={24} />
+                            </TouchableOpacity>
+                        ),
                         ...defaultScreenOptions
                     }} />
             </StackNavigator.Navigator>
