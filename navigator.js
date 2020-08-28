@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, TouchableOpacity, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,6 +10,11 @@ import AddRecipeScreen from './screens/AddRecipe';
 import RecipeViewerScreen from './screens/RecipeViewer';
 import RecipeGalleryScreen from './screens/RecipeGallery';
 import RecipeNotesScreen from './screens/RecipeNotes';
+
+// Components
+import MoreOptions from './components/MoreOptions';
+
+// Screen Functions
 
 const StackNavigator = createStackNavigator();
 const TabNavigator = createBottomTabNavigator();
@@ -94,15 +98,12 @@ const Navigator = (props) => {
                 <StackNavigator.Screen
                     name='Recipe'
                     component={TabRecipeViewerNavigator}
-                    options={{
-                        title: "Recipe Viewer",
-                        headerRight: () => (
-                            <TouchableOpacity style={{marginRight: 24, marginTop: 5}}>
-                                <FontAwesome5 name='ellipsis-v' color="#fff" size={24} />
-                            </TouchableOpacity>
-                        ),
-                        ...defaultScreenOptions
-                    }} />
+                    options={({route}) => ({
+                         title: "Recipe Viewer",
+                         headerRight: (props) => (<MoreOptions options={['Edit', 'Delete']} onOptionsClicked={(item, num) => console.log(route.params.recipeId, item, num)} />),
+                         ...defaultScreenOptions
+                     })}
+                    />
             </StackNavigator.Navigator>
         </NavigationContainer>
     )

@@ -3,11 +3,12 @@ import { ScrollView, View, Text, Image, StyleSheet } from 'react-native';
 import db from '../data/db_controller';
 
 const RecipeViewer = (props) => {
-    console.log(props.route);
     const { recipeId } = props.route.params;
     const [recipeInfo, setRecipeInfo] = useState(null);
 
     useEffect(() => {
+        props.navigation.setParams({workingOn: 25});
+        
         if (recipeId) {
             // Fetch recipe info
             db.transaction(tx => {
@@ -21,7 +22,6 @@ const RecipeViewer = (props) => {
                         instructions: JSON.parse(result.rows._array[0].steps),
                         imagePreview: result.rows._array[0].image_uri
                     };
-                    console.log(formattedRecipe);
                     setRecipeInfo(formattedRecipe);
                 })
             },
