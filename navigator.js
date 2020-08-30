@@ -14,7 +14,8 @@ import RecipeNotesScreen from './screens/RecipeNotes';
 // Components
 import MoreOptions from './components/MoreOptions';
 
-// Screen Functions
+// Screen Options
+import { getOptions, runOptionsCommand } from './screens_options/RecipeOptions';
 
 const StackNavigator = createStackNavigator();
 const TabNavigator = createBottomTabNavigator();
@@ -98,9 +99,9 @@ const Navigator = (props) => {
                 <StackNavigator.Screen
                     name='Recipe'
                     component={TabRecipeViewerNavigator}
-                    options={({route}) => ({
+                    options={(navigation) => ({
                          title: "Recipe Viewer",
-                         headerRight: (props) => (<MoreOptions options={['Edit', 'Delete']} onOptionsClicked={(item, num) => console.log(route.params.recipeId, item, num)} />),
+                         headerRight: (props) => (<MoreOptions options={getOptions()} onOptionsClicked={(item, num) => runOptionsCommand(num, navigation.route.params.recipeId, navigation.navigation.navigate) } />),
                          ...defaultScreenOptions
                      })}
                     />

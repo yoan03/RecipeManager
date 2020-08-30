@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 
 // Components
 import SearchInput from '../components/SearchInput';
@@ -12,6 +13,7 @@ const Recipe = (props) => {
     const [initialDragY, setInitialDragY] = useState(0);
     const [currentDragY, setCurrentDragY] = useState(0);
     const [recipes, setRecipes] = useState([]);
+    const isFocused = useIsFocused();
 
     useEffect(()=> {
         console.log("Running Effect!")
@@ -44,7 +46,9 @@ const Recipe = (props) => {
                 console.log(error);
             });
         })
-    }, []);
+    }, [isFocused]);
+
+
 
     return (
         <View style={styles.screen}>
