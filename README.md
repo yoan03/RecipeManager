@@ -16,7 +16,7 @@ It is an app to save home made receipt and change it, and store the changes in y
 - [x] Make the data also store the image and show
 - [x] Show the recipe info in the viewer (Only preview image for the moment)
 - [x] Delete Recipes
-- [ ] Delete Picture from folder
+- [x] Delete Picture from folder
 - [ ] Confirm deletion with a modal
 - [ ] Make a requirement at least a instruction and ingredient, or won't allow adding
 - [ ] Also show when there is no recipe

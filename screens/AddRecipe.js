@@ -1,5 +1,5 @@
 import React, { useState, useReducer } from 'react';
-import { ScrollView, View, Text, TextInput, TouchableOpacity, ImageBackground, StyleSheet} from 'react-native';
+import { ScrollView, View, Text, TextInput, TouchableOpacity, ImageBackground, StyleSheet } from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
@@ -162,12 +162,18 @@ const AddRecipe = (props) => {
     };
 
     const onSubmitRecipe = async () => {
-        const newPath = `${FileSystem.documentDirectory}${Math.floor(Math.random() * 1000000)}${Path.extname(previewImage)}`;
-        const result = await FileSystem.copyAsync({ from: previewImage, to: newPath});
-        const info = await FileSystem.getInfoAsync(newPath);
-        if(info.exists){
-            recordRecipe(newPath);
+        if (previewImage) {
+            const newPath = `${FileSystem.documentDirectory}${Math.floor(Math.random() * 1000000)}${Path.extname(previewImage)}`;
+            const result = await FileSystem.copyAsync({ from: previewImage, to: newPath });
+            const info = await FileSystem.getInfoAsync(newPath);
+            if (info.exists) { 
+                return recordRecipe(newPath);
+            }
+
+            return;
         }
+
+        recordRecipe(null);
     };
 
     // Save the recipe as a record
@@ -295,10 +301,10 @@ const AddRecipe = (props) => {
                 <View style={styles.horizontalDivider} />
                 <Text style={styles.textHeading}>Recipe Image</Text>
                 <View>
-                    <ImageBackground resizeMode="contain" style={{ flex: 1, height: 250, justifyContent: 'center' }} source={previewImage ? { uri: previewImage} : require('../assets/no_image_available.png')}>
+                    <ImageBackground resizeMode="contain" style={{ flex: 1, height: 250, justifyContent: 'center' }} source={previewImage ? { uri: previewImage } : require('../assets/no_image_available.png')}>
                         <View style={styles.addIngredientButtonContainer}>
                             {previewImage ?
-                                <CustomButton 
+                                <CustomButton
                                     title="Remove Image"
                                     color="#dc143c"
                                     onPress={() => setPreviewImage(null)}

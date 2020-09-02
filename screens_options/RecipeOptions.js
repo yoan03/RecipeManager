@@ -1,4 +1,5 @@
 import db from '../data/db_controller';
+import { deleteAsync } from 'expo-file-system'
 
 // Constants
 export const EDIT_RECIPE = 0;
@@ -38,12 +39,25 @@ export const runOptionsCommand = (command, recipeId, navigateFunc) => {
     }
 }
 
-// Delete a Recipe
+// Delete a Recipe along with the preview image
 const deleteRecipe = (id, cb) => {
     db.transaction((tx) => {
-        tx.executeSql(`DELETE FROM Recipe WHERE id=?`, [id], (_, resultSet) => {
-            cb();
+        tx.executeSql('SELECT image_uri FROM Recipe WHERE id=?;', [id], (tx2, resultSet) => {
+            console.log("Starting deletion");
+            const imageUri = resultSet.rows._array[0].image_uri;
+
+            if(imageUri)
+                deleteAsync(imageUri, { idempotent: true });
+            
+            tx2.executeSql('DELETE FROM Recipe WHERE id=?;', [id], (_, resultSet) => {
+                console.log("Recipe deleted!");
+                cb();
+            }, (_, error) => {
+                console.log(error);
+            });
         });
-    })
+
+
+    });
 }
 
